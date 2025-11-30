@@ -1,6 +1,11 @@
-package Src.Model;
+package Src;
 
 import javax.swing.*;
+
+import Src.Model.DatabaseConnection;
+import Src.view.LoginPanel;
+import Src.view.MainMenu;
+
 import java.awt.*;
 
 public class Main extends JFrame {

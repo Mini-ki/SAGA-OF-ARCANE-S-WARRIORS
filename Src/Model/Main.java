@@ -11,7 +11,6 @@ public class Main extends JFrame {
     // Panel Halaman (Cuma 2 dulu)
     private LoginPanel loginPanel;
     private MainMenu mainMenu;
-    // private GamePanel gamePanel; // <-- SAYA KOMENTAR DULU BIAR GAK ERROR
     
     private DatabaseConnection dbConnection; 
     private String activeUserId;
@@ -61,15 +60,11 @@ public class Main extends JFrame {
         System.out.println("Login Success: " + username);
         cardLayout.show(mainPanelContainer, "MENU");
     }
-    
-    // Dipanggil MainMenu (EDITAN KHUSUS: Cuma munculin pesan dulu)
+
     public void startGame(String heroName) {
         JOptionPane.showMessageDialog(this, 
             "Game Dimulai!\nHero yang dipilih: " + heroName + "\n(GamePanel belum ada, jadi stop di sini dulu ya!)");
-        
-        // Nanti kalau GamePanel udah ada, baru buka komen ini:
-        // gamePanel.setupGame(heroName); 
-        // cardLayout.show(mainPanelContainer, "GAME");
+
     }
     
     public void logout() {

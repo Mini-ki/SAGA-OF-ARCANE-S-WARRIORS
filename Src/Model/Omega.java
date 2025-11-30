@@ -1,3 +1,4 @@
+package Src.Model;
 public class Omega extends Monster {
     public Omega() { super("Omega", 4000, 100, 55); }
 

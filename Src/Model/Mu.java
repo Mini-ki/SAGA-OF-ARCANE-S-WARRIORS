@@ -1,3 +1,4 @@
+package Src.Model;
 public class Mu extends Monster {
     public Mu() { super("Mu", 5000, 100, 60); }
 

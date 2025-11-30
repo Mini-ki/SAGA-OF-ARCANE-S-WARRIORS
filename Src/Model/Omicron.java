@@ -1,3 +1,4 @@
+package Src.Model;
 public class Omicron extends Monster {
     public Omicron() { super("Omicron", 3000, 100, 50); }
 

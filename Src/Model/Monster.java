@@ -1,3 +1,4 @@
+package Src.Model;
 public abstract class Monster extends GameCharacter {
     protected int turnCounter;
 

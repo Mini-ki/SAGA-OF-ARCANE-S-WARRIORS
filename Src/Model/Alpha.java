@@ -1,3 +1,4 @@
+package Src.Model;
 public class Alpha extends Hero implements Item {
     public Alpha() { super("Alpha", 1000, 500, 100, 70); }
 

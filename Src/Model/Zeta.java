@@ -1,3 +1,4 @@
+package Src.Model;
 public class Zeta extends Hero implements Item {
     public Zeta() { super("Zeta", 1350, 640, 100, 59); }
     @Override public String useSkill1(GameCharacter t) {

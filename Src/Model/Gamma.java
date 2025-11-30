@@ -1,3 +1,4 @@
+package Src.Model;
 public class Gamma extends Hero implements Item {
     public Gamma() { super("Gamma", 890, 470, 120, 50); }
     @Override public String useSkill1(GameCharacter t) { 

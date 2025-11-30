@@ -1,3 +1,4 @@
+package Src.Model;
 public class Beta extends Hero implements Item {
     public Beta() { super("Beta", 2000, 750, 60, 85); }
 

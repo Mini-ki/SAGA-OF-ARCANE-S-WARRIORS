@@ -1,3 +1,4 @@
+package Src.Model;
 public interface Item {
     public void BloodthirstAxe();
     public void CrimsonArmor();

@@ -1,3 +1,4 @@
+package Src.Model;
 public class Xi extends Hero implements Item {
     public Xi() { super("Xi", 1111, 666, 99, 33); }
     @Override public String useSkill1(GameCharacter t) {

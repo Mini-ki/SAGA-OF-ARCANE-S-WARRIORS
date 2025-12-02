@@ -13,10 +13,17 @@ public class Delta extends Hero implements Item {
     @Override public void applyPassive() { this.currentMp += 30; }
 
     // Item
-    public void BloodthirstAxe(){};
-    public void CrimsonArmor(){};
-    public void VampiricBlade(){};
-    public void EndlessWarboots(){};
-    public void WingsOfTheFallen(){};
-    public void DemonHunterSword(){};
+    @Override public void BloodthirstAxe(){};
+    @Override public void CrimsonArmor(){};
+    @Override public void VampiricBlade(){};
+
+    @Override
+    public void EndlessWarboots() {
+        this.maxMp += 300; // Mana besar untuk spam skill
+        this.defence += 5; // Sedikit movement/defense
+        System.out.println(this.getName() + " bought Endless Warboots! (Max MP +300)");
+    }
+    
+    @Override public void WingsOfTheFallen(){};
+    @Override public void DemonHunterSword(){};
 }

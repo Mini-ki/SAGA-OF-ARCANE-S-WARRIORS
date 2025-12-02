@@ -13,10 +13,16 @@ public class Gamma extends Hero implements Item {
     @Override public void applyPassive() { this.attack += 10; }
 
     // Item
-    public void BloodthirstAxe(){};
-    public void CrimsonArmor(){};
-    public void VampiricBlade(){};
-    public void EndlessWarboots(){};
-    public void WingsOfTheFallen(){};
-    public void DemonHunterSword(){};
+    @Override public void BloodthirstAxe(){};
+    @Override public void CrimsonArmor(){};
+
+    @Override
+    public void VampiricBlade() {
+        this.attack += 40; // Attack tinggi untuk burst
+        System.out.println(this.getName() + " bought Vampiric Blade! (Attack +40 & Lifesteal Up)");
+    }
+
+    @Override public void EndlessWarboots(){};
+    @Override public void WingsOfTheFallen(){};
+    @Override public void DemonHunterSword(){};
 }

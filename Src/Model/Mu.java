@@ -1,6 +1,6 @@
-package Src.Model;
+package src.model;
 public class Mu extends Monster {
-    public Mu() { super("Mu", 5000, 100, 60); }
+    public Mu() { super("Mu", "assets/monster/Mu.png", 5000, 200, 200); }
 
     @Override
     public void performAI(Hero target) {

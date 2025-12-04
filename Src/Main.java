@@ -1,17 +1,24 @@
-package Src.Model;
+package src;
 
 import javax.swing.*;
+
+import src.model.DatabaseConnection;
+import src.view.LoginPanel;
+import src.view.MainMenu;
+import src.view.GamePanel; 
+
 import java.awt.*;
+import java.net.URL;
 
 public class Main extends JFrame {
     
     private CardLayout cardLayout;
     private JPanel mainPanelContainer;
     
-    // Panel Halaman (Cuma 2 dulu)
     private LoginPanel loginPanel;
     private MainMenu mainMenu;
-    
+    private GamePanel gamePanel; 
+
     private DatabaseConnection dbConnection; 
     private String activeUserId;
 
@@ -22,30 +29,22 @@ public class Main extends JFrame {
         setLocationRelativeTo(null); 
         setResizable(false);
 
-        // 1. Konek Database
         dbConnection = new DatabaseConnection();
         
-        // 2. Setup Card Layout
         cardLayout = new CardLayout();
         mainPanelContainer = new JPanel(cardLayout);
 
-        // 3. Buat Panel
         loginPanel = new LoginPanel(this);
         mainMenu = new MainMenu(this);
-        // gamePanel = new GamePanel(this); // <-- SKIP DULU
-        
-        // 4. Masukkan Panel ke Container
+
         mainPanelContainer.add(loginPanel, "LOGIN");
         mainPanelContainer.add(mainMenu, "MENU");
-        // mainPanelContainer.add(gamePanel, "GAME"); // <-- SKIP DULU
 
         add(mainPanelContainer);
         
-        // Mulai di Login
         cardLayout.show(mainPanelContainer, "LOGIN");
     }
 
-    // --- Method untuk dipanggil Panel lain ---
     public DatabaseConnection getDB() { 
         return dbConnection; 
     }
@@ -54,25 +53,51 @@ public class Main extends JFrame {
         return activeUserId; 
     }
 
-    // Dipanggil LoginPanel saat sukses
     public void onLoginSuccess(String userId, String username) {
         this.activeUserId = userId;
         System.out.println("Login Success: " + username);
         cardLayout.show(mainPanelContainer, "MENU");
     }
 
-    public void startGame(String heroName) {
-        JOptionPane.showMessageDialog(this, 
-            "Game Dimulai!\nHero yang dipilih: " + heroName + "\n(GamePanel belum ada, jadi stop di sini dulu ya!)");
+    // === Integrasi GamePanel ===
+    public void startGame() {
 
+        if (gamePanel == null) {
+            gamePanel = new GamePanel(this);
+            mainPanelContainer.add(gamePanel, "GAME");
+        }
+
+        cardLayout.show(mainPanelContainer, "GAME");
     }
-    
+
+    public void backToMenu() {
+        cardLayout.show(mainPanelContainer, "MENU");
+    }
+
     public void logout() {
         this.activeUserId = null;
         cardLayout.show(mainPanelContainer, "LOGIN");
     }
 
+    public DatabaseConnection getDb() {
+        return dbConnection;
+    }
+
+    public void showMainMenu() {
+        cardLayout.show(mainPanelContainer, "MENU");
+    }
+
+    public String getCurrentUserId() {
+        return activeUserId;
+    }
+
+    // sementara default level 1
+    public int getCurrentBossLevel() {
+        return 1;
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Main().setVisible(true));
     }
+
 }

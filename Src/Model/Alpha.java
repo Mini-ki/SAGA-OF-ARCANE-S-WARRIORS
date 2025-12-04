@@ -1,6 +1,6 @@
-package Src.Model;
+package src.model;
 public class Alpha extends Hero implements Item {
-    public Alpha() { super("Alpha", 1000, 500, 100, 70); }
+    public Alpha() { super("Alpha", "assets/hero/alpa.png", 2000, 1000, 400, 250, 5, 10, 20); }
 
     @Override
     public String useSkill1(GameCharacter target) {
@@ -28,10 +28,15 @@ public class Alpha extends Hero implements Item {
     @Override public void applyPassive() {  }
 
     // Item
-    public void BloodthirstAxe(){};
-    public void CrimsonArmor(){};
-    public void VampiricBlade(){};
-    public void EndlessWarboots(){};
-    public void WingsOfTheFallen(){};
-    public void DemonHunterSword(){};
+    @Override
+    public void BloodthirstAxe() {
+        this.attack += 30; // Menambah damage skill
+        System.out.println(this.getName() + " bought Bloodthirst Axe! (Attack +30 & Skill Lifesteal Up)");
+    }
+
+    @Override public void CrimsonArmor(){};
+    @Override public void VampiricBlade(){};
+    @Override public void EndlessWarboots(){};
+    @Override public void WingsOfTheFallen(){};
+    @Override public void DemonHunterSword(){};
 }

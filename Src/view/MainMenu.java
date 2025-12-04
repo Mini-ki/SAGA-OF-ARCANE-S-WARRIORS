@@ -1,6 +1,9 @@
-package Src.Model;
+package src.view;
 
 import javax.swing.*;
+
+import src.Main;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -43,16 +46,7 @@ public class MainMenu extends JPanel {
         gbc.gridy = 3; 
         add(btnExit, gbc);
 
-        btnNewGame.addActionListener(e -> {
-            String[] heroes = {"Alpha", "Beta", "Gamma", "Delta", "Xi", "Zeta"};
-            String selectedHero = (String) JOptionPane.showInputDialog(
-                    this, "Pilih Hero Kamu:", "New Game",
-                    JOptionPane.PLAIN_MESSAGE, null, heroes, heroes[0]);
-
-            if (selectedHero != null && !selectedHero.isEmpty()) {
-                mainApp.startGame(selectedHero);
-            }
-        });
+        btnNewGame.addActionListener(e -> { mainApp.startGame();});
 
         // Continue
         btnContinue.addActionListener(e -> {

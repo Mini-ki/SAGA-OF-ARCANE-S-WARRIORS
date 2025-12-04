@@ -1,6 +1,6 @@
-package Src.Model;
+package src.model;
 public class Beta extends Hero implements Item {
-    public Beta() { super("Beta", 2000, 750, 60, 85); }
+    public Beta() { super("Beta", "assets/hero/beta.png", 3000, 1500, 100, 300, 2, 10, 30); }
 
     @Override
     public String useSkill1(GameCharacter target) {
@@ -26,10 +26,17 @@ public class Beta extends Hero implements Item {
     @Override public void applyPassive() { this.defence += 5; }
 
     // Item
-    public void BloodthirstAxe(){};
-    public void CrimsonArmor(){};
-    public void VampiricBlade(){};
-    public void EndlessWarboots(){};
-    public void WingsOfTheFallen(){};
-    public void DemonHunterSword(){};
+    @Override public void BloodthirstAxe(){};
+
+    @Override
+    public void CrimsonArmor() {
+        this.defence += 50; // Defense masif
+        this.maxHp += 500;  // HP tambahan
+        System.out.println(this.getName() + " bought Crimson Armor! (Def +50 & HP +500)");
+    }
+    
+    @Override public void VampiricBlade(){};
+    @Override public void EndlessWarboots(){};
+    @Override public void WingsOfTheFallen(){};
+    @Override public void DemonHunterSword(){};
 }

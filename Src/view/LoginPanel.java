@@ -1,6 +1,9 @@
-package Src.Model;
+package src.view;
 
 import javax.swing.*;
+
+import src.Main;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;

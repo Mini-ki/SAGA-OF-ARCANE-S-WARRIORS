@@ -1,4 +1,4 @@
-package Src.Model;
+package src.model;
 public interface Item {
     public void BloodthirstAxe();
     public void CrimsonArmor();
@@ -6,5 +6,4 @@ public interface Item {
     public void EndlessWarboots();
     public void WingsOfTheFallen();
     public void DemonHunterSword();
-
 }

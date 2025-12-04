@@ -1,6 +1,7 @@
-package Src.Model;
+package src.model;
 public class Delta extends Hero implements Item {
-    public Delta() { super("Delta", 975, 430, 80, 45); }
+    public Delta() { super("Delta", "assets/hero/delta.png", 1500, 5000, 500, 45, 7, 10, 20); }
+
     @Override public String useSkill1(GameCharacter t) {
         if(!canCast("Skill1", 95, 4)) return "CD"; t.takeDamage(attack); return "Spark";
     }

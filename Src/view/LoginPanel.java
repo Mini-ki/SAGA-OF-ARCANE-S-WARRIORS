@@ -1,8 +1,8 @@
-package Src.view;
+package src.view;
 
 import javax.swing.*;
 
-import Src.Main;
+import src.Main;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

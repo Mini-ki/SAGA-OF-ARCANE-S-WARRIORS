@@ -1,4 +1,4 @@
-package Src.Model;
+package src.model;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +10,12 @@ public abstract class GameCharacter {
     protected double defence;
     protected boolean isStunned;
     protected boolean isAlive;
+    protected String imageCharacter;
     protected List<String> activeEffects;
 
-    public GameCharacter(String name, double maxHp, double attack, double defence) {
+    public GameCharacter(String name, String imageCharacter, double maxHp, double attack, double defence) {
         this.name = name;
+        this.imageCharacter = imageCharacter;
         this.maxHp = this.currentHp = maxHp;
         this.attack = attack;
         this.defence = defence;
@@ -45,6 +47,13 @@ public abstract class GameCharacter {
     public String getName() { return name; }
     public double getCurrentHp() { return currentHp; }
     public double getMaxHp() { return maxHp; }
+    public double getAttack() {return attack;}
+    public double getDefense() {return defence;}
     public boolean isAlive() { return isAlive; }
+    public String getImageUrl(){ return imageCharacter;}
     public void setStunned(boolean s) { isStunned = s; }
+
+    public void setCurrentHp(double currentHp){
+        this.currentHp = currentHp;
+    }
 }

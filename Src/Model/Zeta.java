@@ -1,6 +1,6 @@
-package Src.Model;
+package src.model;
 public class Zeta extends Hero implements Item {
-    public Zeta() { super("Zeta", 1350, 640, 100, 59); }
+    public Zeta() { super("Zeta", "assets/hero/zeta.png",1350, 640, 100, 59, 5, 15, 30); }
     @Override public String useSkill1(GameCharacter t) {
         if(!canCast("Skill1", 167, 3)) return "CD"; t.takeDamage(attack * 2); return "Crit Shot";
     }

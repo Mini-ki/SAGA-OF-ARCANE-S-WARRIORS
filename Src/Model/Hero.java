@@ -1,4 +1,4 @@
-package Src.Model;
+package src.model;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,17 +7,31 @@ public abstract class Hero extends GameCharacter {
     protected double maxMp;
     protected double regenMp;
     protected boolean awakeningMode;
-    protected Map<String, Integer> skillCooldowns;
+    public Map<String, Integer> baseCooldowns;
+    public Map<String, Integer> skillCooldowns;
 
-    public Hero(String name, double maxHp, double maxMp, double attack, double defence) {
-        super(name, maxHp, attack, defence);
+    public Hero(String name, String imageCharacter, double maxHp, double maxMp, double attack, double defence, int cd1, int cd2, int cdulti) {
+        super(name, imageCharacter, maxHp, attack, defence);
         this.maxMp = this.currentMp = maxMp;
         this.regenMp = 200;
         this.awakeningMode = false;
+        // Base Skill
+        this.baseCooldowns = new HashMap<>();
+        this.baseCooldowns.put("Skill1", cd1);
+        this.baseCooldowns.put("Skill2", cd2);
+        this.baseCooldowns.put("Ultimate", cdulti);
+        this.baseCooldowns.put("RegenHp", 5);
+        this.baseCooldowns.put("RegenMp", 5);
+        this.baseCooldowns.put("Awakening", 10);
+
+        // Current Skill
         this.skillCooldowns = new HashMap<>();
         this.skillCooldowns.put("Skill1", 0);
         this.skillCooldowns.put("Skill2", 0);
         this.skillCooldowns.put("Ultimate", 0);
+        this.skillCooldowns.put("RegenHp", 0);
+        this.skillCooldowns.put("RegenMp", 0);
+        this.skillCooldowns.put("Awakening", 0);
     }
 
     public abstract String useSkill1(GameCharacter target);
@@ -54,4 +68,35 @@ public abstract class Hero extends GameCharacter {
         skillCooldowns.put(skill, cd);
         return true;
     }
+
+    public static Hero createHero(String id) {
+        switch (id) {
+            case "H01":
+                return new Alpha();
+            case "H02":
+                return new Gamma();
+            case "H03":
+                return new Zeta();
+            case "H04":
+                return new Beta();
+            case "H05":
+                return new Delta();
+            case "H06":
+                return new Xi();    
+            default:
+                throw new IllegalArgumentException("Unknown hero id: " + id);
+        }
+
+    }
+
+    public double getCurrentMp(){
+        return currentMp;
+    }
+    public double getMaxMp() {
+        return maxMp;
+    }
+    public void setCurrentMp(double currentMp){
+        this.currentMp = currentMp;
+    }
+
 }

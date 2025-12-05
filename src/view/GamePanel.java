@@ -932,7 +932,6 @@ public class GamePanel extends JPanel {
             
             if (checkWinCondition()) return;
             
-            nextTurn();
             isTurnActive = true;
             refreshSkillButtons();
             battlePanelContainer.repaint();
@@ -955,7 +954,7 @@ public class GamePanel extends JPanel {
         int nextIndex = (currentIndex + 1) % playerTeam.size();
         Hero newHero = playerTeam.get(nextIndex);
         
-        if (!newHero.isAlive()) {
+        if (!playerTeam.get(nextIndex).isAlive()) {
             logMessage(newHero.getName() + " pingsan! Tidak bisa diganti.");
             return;
         }
@@ -996,8 +995,17 @@ public class GamePanel extends JPanel {
     }
     
     private boolean checkWinCondition() {
+        int LevelBoss = mainApp.getDb().loadCheckpoint(mainApp.getActiveUserId());
         if (!currentMonster.isAlive()) {
             logMessage(currentMonster.getName() + " dikalahkan!");
+
+            if (!currentMonster.isAlive() && LevelBoss == 3) {
+                JOptionPane.showMessageDialog(this, "WINNER", "Winner", JOptionPane.INFORMATION_MESSAGE);
+                cooldownTimer.stop();
+                mainApp.showMainMenu();
+                elapsedTimeTimer.stop();
+                return true;
+            }
             showNextLevelDialog();
             elapsedTimeTimer.stop();
             return true;
@@ -1050,10 +1058,6 @@ public class GamePanel extends JPanel {
         for (Hero hero : playerTeam) {
             hero.skillCooldowns = new HashMap<>(hero.baseCooldowns);
         }
-    }
-    
-    private void nextTurn() {
-        turnCounter++;
     }
     
     private void logMessage(String message) {

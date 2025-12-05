@@ -1,6 +1,6 @@
 package src.model;
 public class Alpha extends Hero {
-    public Alpha() { super("H01", "Alpha", "assets/hero/alpa.png", 2000, 1000, 200, 250, 5, 10, 20); }
+    public Alpha() { super("H01", "Alpha", "assets/hero/alpa.png", 2000, 1000, 1000, 250, 5, 10, 20); }
 
     @Override
     public String useSkill1(GameCharacter target) {

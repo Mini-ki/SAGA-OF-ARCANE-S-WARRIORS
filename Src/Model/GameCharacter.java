@@ -4,6 +4,7 @@ import java.util.List;
 
 public abstract class GameCharacter {
     protected String name;
+    protected String idCharacter;
     protected double currentHp;
     protected double maxHp;
     protected double attack;
@@ -13,7 +14,8 @@ public abstract class GameCharacter {
     protected String imageCharacter;
     protected List<String> activeEffects;
 
-    public GameCharacter(String name, String imageCharacter, double maxHp, double attack, double defence) {
+    public GameCharacter(String idCharacter, String name, String imageCharacter, double maxHp, double attack, double defence) {
+        this.idCharacter = idCharacter;
         this.name = name;
         this.imageCharacter = imageCharacter;
         this.maxHp = this.currentHp = maxHp;
@@ -44,6 +46,7 @@ public abstract class GameCharacter {
     }
 
     // Getters & Setters
+    public String getIdCharacter(){return idCharacter;}
     public String getName() { return name; }
     public double getCurrentHp() { return currentHp; }
     public double getMaxHp() { return maxHp; }
@@ -51,9 +54,7 @@ public abstract class GameCharacter {
     public double getDefense() {return defence;}
     public boolean isAlive() { return isAlive; }
     public String getImageUrl(){ return imageCharacter;}
+    
     public void setStunned(boolean s) { isStunned = s; }
-
-    public void setCurrentHp(double currentHp){
-        this.currentHp = currentHp;
-    }
+    public void setCurrentHp(double currentHp){this.currentHp = currentHp;}
 }

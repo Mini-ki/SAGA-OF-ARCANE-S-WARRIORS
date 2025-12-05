@@ -46,7 +46,7 @@ public class MainMenu extends JPanel {
         gbc.gridy = 3; 
         add(btnExit, gbc);
 
-        btnNewGame.addActionListener(e -> { mainApp.startGame();});
+        btnNewGame.addActionListener(e -> { mainApp.startGame("newgame");});
 
         // Continue
         btnContinue.addActionListener(e -> {
@@ -59,6 +59,7 @@ public class MainMenu extends JPanel {
             int level = mainApp.getDB().loadCheckpoint(userId);
             if (level > 0) {
                 JOptionPane.showMessageDialog(this, "Save Data Ditemukan: Level " + level + "\n(Melanjutkan...)");
+                mainApp.startGame("continue");
             } else {
                 JOptionPane.showMessageDialog(this, "Tidak ada Save Data.");
             }

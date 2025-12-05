@@ -4,6 +4,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseConnection {
 
@@ -12,10 +14,6 @@ public class DatabaseConnection {
     private static final String DB_USER = "root"; 
     private static final String DB_PASS = "";    
     
-    /**
-     * Mendapatkan objek Connection ke database MySQL.
-     * @return Connection objek
-     */
     public Connection getConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -37,15 +35,40 @@ public class DatabaseConnection {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, user);
-            pstmt.setString(2, pass); // *Catatan: Dalam aplikasi nyata, password harus di-hash (misalnya, MD5 atau bcrypt)*
+            pstmt.setString(2, pass); 
 
             try (ResultSet rs = pstmt.executeQuery()) {
-                return rs.next(); // Jika ada baris (rs.next() == true), maka login berhasil
+                return rs.next(); 
             }
         } catch (SQLException e) {
             System.err.println("Login Error: " + e.getMessage());
             return false;
         }
+    }
+
+    public String getIdUsers(String user) {
+        String sql = "SELECT id_users FROM users WHERE username = ?";
+        
+        try (Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, user);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String idUser = rs.getString("id_users");
+                    System.out.println("DEBUG: id_user untuk username '" + user + "' = " + idUser);
+                    return idUser; 
+                } else {
+                    System.out.println("DEBUG: Tidak ada user dengan username '" + user + "'");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error getIdUsers: " + e.getMessage());
+        }
+
+        return null; 
     }
 
     public boolean register(String user, String pass) {
@@ -73,30 +96,39 @@ public class DatabaseConnection {
         }
     }
     
-    public void saveCheckpoint(String userId, int bossLevel) {
-        String sql = "INSERT INTO storymode (id_user, id_hero, current_hp, current_mp, duration, boss_level) " +
-                     "VALUES (?, '001', 1, 1, '00:00:00', ?) " + 
-                     "ON DUPLICATE KEY UPDATE boss_level = ?"; 
+    public void saveCheckpoint(String userId, String idHero, String idMonster,int currentHp, int currentMp, int bossLevel, boolean item) {
+
+        String sql = "INSERT INTO storymode (id_user, id_hero, id_monster, current_hp, current_mp, duration, boss_level, item) " +
+                    "VALUES (?, ?, ?, ?, ?, '00:00:00', ?, ?) " +
+                    "ON DUPLICATE KEY UPDATE " +
+                    "id_hero = VALUES(id_hero), " +
+                    "id_monster = VALUES(id_monster), " +
+                    "current_hp = VALUES(current_hp), " +
+                    "current_mp = VALUES(current_mp), " +
+                    "boss_level = VALUES(boss_level)";
 
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            String userIdStr = String.valueOf(userId);
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, userIdStr);
-            pstmt.setInt(2, bossLevel);
-            pstmt.setInt(3, bossLevel); 
-            
+            pstmt.setString(1, userId);     
+            pstmt.setString(2, idHero);     
+            pstmt.setString(3, idMonster);  
+            pstmt.setInt(4, currentHp);   
+            pstmt.setInt(5, currentMp);     
+            pstmt.setInt(6, bossLevel);
+            pstmt.setBoolean(7, item);     
+
             pstmt.executeUpdate();
-            System.out.println("Checkpoint saved successfully for user " + userIdStr + " at Boss Level " + bossLevel);
+            System.out.println("Checkpoint saved for user " + userId);
 
         } catch (SQLException e) {
             System.err.println("Save Checkpoint Error: " + e.getMessage());
         }
     }
 
+
     public int loadCheckpoint(String userId) {
-        String sql = "SELECT boss_level FROM storymode WHERE id_user = ?";
+        String sql = "SELECT boss_level FROM storymode WHERE id_user = ? ORDER BY boss_level DESC";
         
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -112,6 +144,126 @@ public class DatabaseConnection {
             System.err.println("Load Checkpoint Error: " + e.getMessage());
         }
         return 0; 
+    }
+
+    public void newGame(String userId) {
+        String sql = "DELETE FROM storymode WHERE id_user = ?";
+
+        try (Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, userId);
+            int rowsDeleted = pstmt.executeUpdate();
+            System.out.println("DEBUG: " + rowsDeleted + " row(s) deleted for userId = " + userId);
+
+        } catch (SQLException e) {
+            System.err.println("Error in newGame: " + e.getMessage());
+        }
+    }
+
+    public int getLoadHp(String userId, String idHero){
+        String sql = "SELECT current_hp FROM storymode WHERE id_user = ? and id_hero = ?";
+        
+        try (Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            pstmt.setString(1, userId);
+            pstmt.setString(2, idHero);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("current_hp");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Load Checkpoint Error: " + e.getMessage());
+        }
+        return 0; 
+    }
+
+    public int getLoadMp(String userId, String idHero){
+        String sql = "SELECT current_mp FROM storymode WHERE id_user = ? and id_hero = ?";
+        
+        try (Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            pstmt.setString(1, userId);
+            pstmt.setString(2, idHero);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("current_mp");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Load Checkpoint Error: " + e.getMessage());
+        }
+        return 0; 
+    }
+
+    public String[] getLoadIdHero(String userId) {
+        String sql = "SELECT id_hero FROM storymode WHERE id_user = ?";
+
+        List<String> heroes = new ArrayList<>();
+
+        try (Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, userId);
+          
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {  
+                    String idHero = rs.getString("id_hero");
+                    System.out.println("DEBUG: id_hero = " + idHero);
+                    heroes.add(idHero);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error getLoadIdHero: " + e.getMessage());
+        }
+        
+        return heroes.toArray(new String[0]);
+    }
+
+
+    public boolean getStatusItem(String userId, String idHero){
+        String sql = "SELECT item FROM storymode WHERE id_user = ? and id_hero = ?";
+        
+        try (Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            pstmt.setString(1, userId);
+            pstmt.setString(2, idHero);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    if (rs.getInt("item") ==  0) {
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                    
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Load Checkpoint Error: " + e.getMessage());
+        }
+        return false; 
+    }
+
+    public boolean saveStatusItem(String userId, String idHero){
+        String sql = "UPDATE storymode SET item = FALSE WHERE id_user = ? and id_hero = ?";
+        
+        try (Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            pstmt.setString(1, userId);
+            pstmt.setString(2, idHero);
+        } catch (SQLException e) {
+            System.err.println("Save Checkpoint Error: " + e.getMessage());
+        }
+        return false; 
     }
 
 }

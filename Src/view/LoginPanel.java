@@ -91,8 +91,7 @@ public class LoginPanel extends JPanel {
         }
 
         if (mainApp.getDB().login(username, password)) {
-            // Login sukses, kirim ID "1" (dummy) dan username ke Main
-            mainApp.onLoginSuccess("1", username); 
+            mainApp.onLoginSuccess(mainApp.getDB().getIdUsers(username), username); 
         } else {
             JOptionPane.showMessageDialog(this, "Login Gagal! Cek User/Pass.", "Error", JOptionPane.ERROR_MESSAGE);
         }

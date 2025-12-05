@@ -2,7 +2,7 @@ package src.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Hero extends GameCharacter {
+public abstract class Hero extends GameCharacter implements Item {
     protected double currentMp;
     protected double maxMp;
     protected double regenMp;
@@ -10,8 +10,8 @@ public abstract class Hero extends GameCharacter {
     public Map<String, Integer> baseCooldowns;
     public Map<String, Integer> skillCooldowns;
 
-    public Hero(String name, String imageCharacter, double maxHp, double maxMp, double attack, double defence, int cd1, int cd2, int cdulti) {
-        super(name, imageCharacter, maxHp, attack, defence);
+    public Hero(String idCharacter, String name, String imageCharacter, double maxHp, double maxMp, double attack, double defence, int cd1, int cd2, int cdulti) {
+        super(idCharacter, name, imageCharacter, maxHp, attack, defence);
         this.maxMp = this.currentMp = maxMp;
         this.regenMp = 200;
         this.awakeningMode = false;
@@ -92,11 +92,20 @@ public abstract class Hero extends GameCharacter {
     public double getCurrentMp(){
         return currentMp;
     }
+
     public double getMaxMp() {
         return maxMp;
     }
+
     public void setCurrentMp(double currentMp){
         this.currentMp = currentMp;
     }
+
+    @Override public void BloodthirstAxe() {}
+    @Override public void CrimsonArmor(){};
+    @Override public void VampiricBlade(){};
+    @Override public void EndlessWarboots(){};
+    @Override public void WingsOfTheFallen(){};
+    @Override public void DemonHunterSword(){};
 
 }

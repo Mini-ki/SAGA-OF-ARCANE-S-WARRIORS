@@ -59,11 +59,9 @@ public class Main extends JFrame {
         cardLayout.show(mainPanelContainer, "MENU");
     }
 
-    // === Integrasi GamePanel ===
-    public void startGame() {
-
+    public void startGame(String menu) {
         if (gamePanel == null) {
-            gamePanel = new GamePanel(this);
+            gamePanel = new GamePanel(this, menu);
             mainPanelContainer.add(gamePanel, "GAME");
         }
 
@@ -90,8 +88,7 @@ public class Main extends JFrame {
     public String getCurrentUserId() {
         return activeUserId;
     }
-
-    // sementara default level 1
+    
     public int getCurrentBossLevel() {
         return 1;
     }

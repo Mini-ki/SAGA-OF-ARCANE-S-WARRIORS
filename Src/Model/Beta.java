@@ -1,6 +1,6 @@
 package src.model;
-public class Beta extends Hero implements Item {
-    public Beta() { super("Beta", "assets/hero/beta.png", 3000, 1500, 100, 300, 2, 10, 30); }
+public class Beta extends Hero {
+    public Beta() { super("H04","Beta", "assets/hero/beta.png", 3000, 1500, 100, 300, 2, 10, 30); }
 
     @Override
     public String useSkill1(GameCharacter target) {

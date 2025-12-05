@@ -1,6 +1,6 @@
 package src.model;
-public class Xi extends Hero implements Item {
-    public Xi() { super("Xi", "assets/hero/xi.png",1111, 666, 99, 33, 10, 20, 30); }
+public class Xi extends Hero{
+    public Xi() { super("H06", "Xi", "assets/hero/xi.png",1111, 666, 99, 33, 10, 20, 30); }
     @Override public String useSkill1(GameCharacter t) {
         if(!canCast("Skill1", 178, 2)) return "CD"; return "Heal";
     }

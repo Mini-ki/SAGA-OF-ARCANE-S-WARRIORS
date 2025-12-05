@@ -1,6 +1,6 @@
 package src.model;
 public class Omicron extends Monster {
-    public Omicron() { super("Omicron","assets/monster/omicron.png", 3000, 100, 100); }
+    public Omicron() { super("M02","Omicron","assets/monster/omicron.png", 3000, 100, 100); }
 
     @Override
     public void performAI(Hero target) {

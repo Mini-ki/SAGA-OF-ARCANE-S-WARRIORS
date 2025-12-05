@@ -1,6 +1,6 @@
 package src.model;
 public abstract class Monster extends GameCharacter {
-    protected int turnCounter;
+    protected int turnCounter = 1;
 
     public Monster(String idCharacter, String name, String imageCharacter, double hp, double attack, double defence) {
         super(idCharacter, name, imageCharacter, hp, attack, defence);

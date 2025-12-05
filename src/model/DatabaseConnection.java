@@ -96,10 +96,10 @@ public class DatabaseConnection {
         }
     }
     
-    public void saveCheckpoint(String userId, String idHero, String idMonster,int currentHp, int currentMp, int bossLevel, boolean item) {
+    public void saveCheckpoint(String userId, String idHero, String idMonster,int currentHp, int currentMp, int bossLevel, boolean item, String duration) {
 
         String sql = "INSERT INTO storymode (id_user, id_hero, id_monster, current_hp, current_mp, duration, boss_level, item) " +
-                    "VALUES (?, ?, ?, ?, ?, '00:00:00', ?, ?) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
                     "ON DUPLICATE KEY UPDATE " +
                     "id_hero = VALUES(id_hero), " +
                     "id_monster = VALUES(id_monster), " +
@@ -114,9 +114,10 @@ public class DatabaseConnection {
             pstmt.setString(2, idHero);     
             pstmt.setString(3, idMonster);  
             pstmt.setInt(4, currentHp);   
-            pstmt.setInt(5, currentMp);     
-            pstmt.setInt(6, bossLevel);
-            pstmt.setBoolean(7, item);     
+            pstmt.setInt(5, currentMp); 
+            pstmt.setString(6, duration);    
+            pstmt.setInt(7, bossLevel);
+            pstmt.setBoolean(8, item);     
 
             pstmt.executeUpdate();
             System.out.println("Checkpoint saved for user " + userId);

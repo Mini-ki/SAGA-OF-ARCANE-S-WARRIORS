@@ -4,7 +4,7 @@ public class Omega extends Monster {
 
     @Override
     public void performAI(Hero target) {
-        if (turnCounter % 4 == 0) {
+        if (turnCounter % 10 == 0) {
             System.out.println("Omega uses Stun Blast!");
             target.takeDamage(attack);
             target.setStunned(true);

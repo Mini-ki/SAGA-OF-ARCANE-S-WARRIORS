@@ -57,6 +57,10 @@ public class GamePanel extends JPanel {
     private Image monsterImage;
     private Image bgImage;
 
+    private long battleStartTime = 0;
+    private int elapsedSeconds = 0;
+    private Timer elapsedTimeTimer;
+
     private static final int BATTLE_WIDTH = 1280;
     private static final int BATTLE_HEIGHT = 720;
     
@@ -518,7 +522,7 @@ public class GamePanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Tim Selesai! Memulai Battle.", "Ready", JOptionPane.INFORMATION_MESSAGE);
             mainApp.getDb().newGame(mainApp.getCurrentUserId());
             for (Hero hero : selectedTeam) {
-                mainApp.getDb().saveCheckpoint(mainApp.getActiveUserId(), hero.getIdCharacter(), "M01", (int) hero.getMaxHp(), (int) hero.getMaxMp(), 1, true);
+                mainApp.getDb().saveCheckpoint(mainApp.getActiveUserId(), hero.getIdCharacter(), "M01", (int) hero.getMaxHp(), (int) hero.getMaxMp(), 1, true, "00:00:00");
             }
             startBattle(selectedTeam, 1);
         }
@@ -526,6 +530,17 @@ public class GamePanel extends JPanel {
     
     private void startBattle(List<Hero> team, int level) {
         loadSound();
+        battleStartTime = System.currentTimeMillis();
+        elapsedSeconds = 0;
+
+        elapsedTimeTimer = new Timer(1000, evt -> {
+            elapsedSeconds++;
+            if (turnInfoLabel != null) {
+                turnInfoLabel.setText("WAKTU: " + formatTime(elapsedSeconds) + " | " + activeHero.getName());
+            }
+            battlePanelContainer.repaint();
+        });
+        elapsedTimeTimer.start();
         this.playerTeam = team;
         this.activeHero = team.get(0);
         this.currentMonster = Monster.createMonster(level);
@@ -754,7 +769,6 @@ public class GamePanel extends JPanel {
         
         g2.setColor(Theme.COLOR_PRIMARY);
         g2.setFont(Theme.FONT_SUBTITLE.deriveFont(16f));
-        g2.drawString("Turn: " + turnCounter, width / 2 - 40, 40);
         
         if (isTurnActive) {
             g2.setColor(Color.decode("#00FF00"));
@@ -765,8 +779,7 @@ public class GamePanel extends JPanel {
         }
     }
     
-    private void drawHPBar(Graphics2D g2, int x, int y, int width, int height, 
-                          String name, int current, int max, Color color) {
+    private void drawHPBar(Graphics2D g2, int x, int y, int width, int height, String name, int current, int max, Color color) {
         g2.setColor(Color.DARK_GRAY);
         g2.fillRoundRect(x, y, width, height, 10, 10);
         
@@ -784,7 +797,6 @@ public class GamePanel extends JPanel {
         g2.drawString(text, x + 10, y + height - 4);
     }
     
-    // ==================== BATTLE LOGIC ====================
     private void setupCooldownTimer() {
         cooldownTimer = new Timer(1000, e -> {
             for (String key : activeHero.skillCooldowns.keySet()) {
@@ -932,13 +944,10 @@ public class GamePanel extends JPanel {
     
     private void monsterAction() {
         if (!currentMonster.isAlive()) return;
-        
-        logMessage(currentMonster.getName() + " menyerang!");
-        double rawDamage = currentMonster.getAttack() - activeHero.getDefense();
-        double monsterDamage = Math.max(0, rawDamage) * 5;
-        
-        activeHero.takeDamage(monsterDamage);
-        logMessage(activeHero.getName() + " menerima " + (int)monsterDamage + " kerusakan.");
+
+        currentMonster.performAI(activeHero);
+        currentMonster.updateTurn();
+        logMessage(activeHero.getName() + " menerima kerusakan.");
     }
     
     private void exchangeHero() {
@@ -983,13 +992,14 @@ public class GamePanel extends JPanel {
             skillButtonPanel.repaint();
         }
         
-        turnInfoLabel.setText("Giliran: " + activeHero.getName());
+        turnInfoLabel.setText("WAKTU: " + formatTime(elapsedSeconds) + " | " + activeHero.getName());
     }
     
     private boolean checkWinCondition() {
         if (!currentMonster.isAlive()) {
             logMessage(currentMonster.getName() + " dikalahkan!");
             showNextLevelDialog();
+            elapsedTimeTimer.stop();
             return true;
         }
         
@@ -998,6 +1008,7 @@ public class GamePanel extends JPanel {
             JOptionPane.showMessageDialog(this, "GAME OVER! Tim Anda dikalahkan.", "Kalah", JOptionPane.ERROR_MESSAGE);
             cooldownTimer.stop();
             mainApp.showMainMenu();
+            elapsedTimeTimer.stop();
             return true;
         }
         return false;
@@ -1021,16 +1032,18 @@ public class GamePanel extends JPanel {
             options[0]
         );
         
+        for (Hero hero : playerTeam) {
+            mainApp.getDb().saveCheckpoint(mainApp.getCurrentUserId(), hero.getIdCharacter(), currentMonster.getIdCharacter(), (int) hero.getCurrentHp(), (int) hero.getCurrentMp(),nextLevel, mainApp.getDb().getStatusItem(mainApp.getActiveUserId(), hero.getIdCharacter()), formatTime(elapsedSeconds));
+        }
+
         if (choice == JOptionPane.YES_OPTION) {
-            for (Hero hero : playerTeam) {
-                mainApp.getDb().saveCheckpoint(mainApp.getCurrentUserId(), hero.getIdCharacter(), currentMonster.getIdCharacter(), (int) hero.getCurrentHp(), (int) hero.getCurrentMp(),nextLevel, mainApp.getDb().getStatusItem(mainApp.getActiveUserId(), hero.getIdCharacter()));
-            }
             resetHeroStateForNextLevel();
             startBattle(playerTeam, nextLevel);
         } else {
             mainApp.showMainMenu();
-            backgroundMusic.stop();
         }
+        backgroundMusic.stop();
+        elapsedTimeTimer.stop(); 
     }
     
     private void resetHeroStateForNextLevel() {
@@ -1045,7 +1058,7 @@ public class GamePanel extends JPanel {
     
     private void logMessage(String message) {
         if (battleLogArea == null) return;
-        battleLogArea.append(">> T" + turnCounter + ": " + message + "\n");
+        battleLogArea.append(">> [" + formatTime(elapsedSeconds) + "] " + message + "\n");
         battleLogArea.setCaretPosition(battleLogArea.getDocument().getLength());
     }
     
@@ -1098,6 +1111,12 @@ public class GamePanel extends JPanel {
         }
     }
 
+    private String formatTime(int totalSeconds) {
+        int hours = totalSeconds / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        int seconds = totalSeconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
     
     public void reset() {
         if (cooldownTimer != null) {

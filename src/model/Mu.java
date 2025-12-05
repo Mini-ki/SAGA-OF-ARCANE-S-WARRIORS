@@ -6,7 +6,7 @@ public class Mu extends Monster {
     public void performAI(Hero target) {
         if (turnCounter % 3 == 0) {
             System.out.println("Mu uses Life Drain!");
-            target.takeDamage(attack * 1.2);
+            target.takeDamage(attack * 1.5);
         } else {
             attack(target);
         }

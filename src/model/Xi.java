@@ -13,17 +13,10 @@ public class Xi extends Hero{
     @Override public void applyPassive() { }
 
     // Item
-    @Override public void BloodthirstAxe(){};
-    @Override public void CrimsonArmor(){};
-    @Override public void VampiricBlade(){};
-    @Override public void EndlessWarboots(){};
-
     @Override
     public void WingsOfTheFallen() {
         this.defence += 40; // Defense tinggi
         this.maxHp += 200;  // HP tambahan
         System.out.println(this.getName() + " bought Wings of The Fallen! (Survival Up)");
     }
-
-    @Override public void DemonHunterSword(){};
 }

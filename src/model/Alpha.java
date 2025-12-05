@@ -33,10 +33,4 @@ public class Alpha extends Hero {
         this.attack += 30; // Menambah damage skill
         System.out.println(this.getName() + " bought Bloodthirst Axe! (Attack +30 & Skill Lifesteal Up)");
     }
-
-    @Override public void CrimsonArmor(){};
-    @Override public void VampiricBlade(){};
-    @Override public void EndlessWarboots(){};
-    @Override public void WingsOfTheFallen(){};
-    @Override public void DemonHunterSword(){};
 }

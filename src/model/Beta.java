@@ -26,17 +26,10 @@ public class Beta extends Hero {
     @Override public void applyPassive() { this.defence += 5; }
 
     // Item
-    @Override public void BloodthirstAxe(){};
-
     @Override
     public void CrimsonArmor() {
         this.defence += 50; // Defense masif
         this.maxHp += 500;  // HP tambahan
         System.out.println(this.getName() + " bought Crimson Armor! (Def +50 & HP +500)");
     }
-    
-    @Override public void VampiricBlade(){};
-    @Override public void EndlessWarboots(){};
-    @Override public void WingsOfTheFallen(){};
-    @Override public void DemonHunterSword(){};
 }

@@ -1,5 +1,8 @@
 package src.view;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 import src.Main;
@@ -7,6 +10,7 @@ import src.model.Hero;
 import src.model.Monster;
 
 import java.awt.*;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +26,7 @@ public class GamePanel extends JPanel {
     private GameState currentState;
     private JPanel cardPanel;
     private CardLayout cardLayout;
+    private Clip backgroundMusic;
     
     private JPanel heroSelectionPanel;
     private JLabel statusLabelHero;
@@ -520,6 +525,7 @@ public class GamePanel extends JPanel {
     }
     
     private void startBattle(List<Hero> team, int level) {
+        loadSound();
         this.playerTeam = team;
         this.activeHero = team.get(0);
         this.currentMonster = Monster.createMonster(level);
@@ -1023,6 +1029,7 @@ public class GamePanel extends JPanel {
             startBattle(playerTeam, nextLevel);
         } else {
             mainApp.showMainMenu();
+            backgroundMusic.stop();
         }
     }
     
@@ -1070,6 +1077,27 @@ public class GamePanel extends JPanel {
         displayCurrentHero();
         cardLayout.show(cardPanel, "HERO_SELECTION");
     }
+
+    private void loadSound() {
+        try {
+            String soundPath = "/assets/sound/background_music.wav";
+            URL soundUrl = getClass().getResource(soundPath);
+            
+            if (soundUrl == null) {
+                System.err.println("Sound file tidak ditemukan: " + soundPath);
+                return;
+            }
+            
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundUrl);
+            backgroundMusic = AudioSystem.getClip();
+            backgroundMusic.open(audioStream);
+            backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
+            System.out.println("Debug Music loaded and playing...");
+        } catch (Exception e) {
+            System.out.println("Debug exception: " + e);
+        }
+    }
+
     
     public void reset() {
         if (cooldownTimer != null) {

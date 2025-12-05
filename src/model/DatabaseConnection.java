@@ -161,7 +161,7 @@ public class DatabaseConnection {
     }
 
     public int getLoadHp(String userId, String idHero){
-        String sql = "SELECT current_hp FROM storymode WHERE id_user = ? and id_hero = ?";
+        String sql = "SELECT current_hp FROM storymode WHERE id_user = ? and id_hero = ? ORDER BY boss_level DESC";
         
         try (Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -181,7 +181,7 @@ public class DatabaseConnection {
     }
 
     public int getLoadMp(String userId, String idHero){
-        String sql = "SELECT current_mp FROM storymode WHERE id_user = ? and id_hero = ?";
+        String sql = "SELECT current_mp FROM storymode WHERE id_user = ? and id_hero = ? ORDER BY boss_level DESC";
         
         try (Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {

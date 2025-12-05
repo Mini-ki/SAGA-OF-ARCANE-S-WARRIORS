@@ -741,10 +741,10 @@ public class GamePanel extends JPanel {
                 g2.drawImage(monsterImage, width - 650, height - 470, 700, 500, null);
             }
             else if(currentMonster.getName() == "Omega"){
-                g2.drawImage(monsterImage, width - 650, height - 620, 1000, 600, null);
+                g2.drawImage(monsterImage, width - 650, height - 580, 1000, 600, null);
             }
             else if(currentMonster.getName() == "Mu"){
-                g2.drawImage(monsterImage, width - 1100, height - 620, 1000, 600, null);
+                g2.drawImage(monsterImage, width - 750, height - 620, 1000, 600, null);
             }
             
         }
